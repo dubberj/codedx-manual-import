@@ -3,17 +3,20 @@ import argparse
 import pandas as pd
 from lxml import etree as ET
 
-# Property of Synopsys, Created by John Dubber - Version 2.02
+# Property of Synopsys, Created by John Dubber - Version 2.03
 # usage: New_Dic_csv_to_xml.py [-h] -i INPUT -o OUTPUT
+
 # Dictionary mapping CSV column names to XML element names.
 # Modify this dictionary to match your CSV column names to the appropriate XML tags. Examples below, make sure to change to match your csv headings.
 # If you want to use a fixed value for a specific XML tag, specify the value here by starting with a "$" sign
+# Left side is codedx mapping - - Right side csv header or fixed value.
+# Please referance codedx manual import documentaion for further description of values below.
 
 column_to_xml_mapping = {
     "REPORT_DATE": "$2023-05-30",
     "REPORT_TOOL": "$My Custom Tool",
     "TOOL_NAME": "Jira-Pentest",
-    "FINDING_STATUS": "$new",               # Use fixed value "new" "escalated" "ignored" "false-positive" "fixed" "unresolved" "gone" "assigned"
+    "FINDING_STATUS": "$new",               # Must use fixed value if you don't have headers with these values "new" "escalated" "ignored" "false-positive" "fixed" "unresolved" "gone" "assigned"
     "NATIVE_ID_VALUE": "Type of Pentest",
     "CWE_ID": "$0",
     "TOOL_CODE": "Key",
@@ -23,7 +26,7 @@ column_to_xml_mapping = {
     "DESCRIPTION_TEXT": "Risk Rating",
     "METADATA_VALUE_KEY": "$Description",
     "METADATA_VALUE_TEXT": "Summary",
-    "SEVERITY": "Ease of Exploitation",     # Use fixed value "info" "low" "medium" "high" "critical" "unspecified" or row that matches these types
+    "SEVERITY": "Ease of Exploitation",     # Must use fixed value if you don't have headers with these values "info" "low" "medium" "high" "critical" "unspecified" or row that matches these types
     "DATE": "$2023-05-30",
     "MY_TOOL_ID": "$My Tool ID",
     "CVE_YEAR": "$",
@@ -34,7 +37,9 @@ column_to_xml_mapping = {
     "INCLUDE_IN_HASH": "$false"
 }
 
-# Retrieve mapped value from row or fixed value from dictionary
+# Retrieve mapped value from header row or fixed value from dictionary and add above.
+
+# No need to adjust code below unless for further customisation.
 
 def get_mapped_or_fixed_value(row, key, default=''):
     mapped_or_fixed_value = column_to_xml_mapping.get(key, default)
